@@ -1,15 +1,47 @@
 <?php
+
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController; // Tambahkan baris ini
 
-Route::get('/', function () { return view('welcome'); })->name('home');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::get('/login', function () { return view('auth.login'); })->name('login');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Ini rute untuk memproses validasi password
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        $dashboardRoute = auth()->user()->role === 'admin'
+            ? 'admin.dashboard'
+            : 'kasir.dashboard';
 
-// Dashboard dikunci kembali dengan middleware
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware('auth')->name('dashboard');
+        return redirect()->route($dashboardRoute);
+    })->name('dashboard');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::view('/admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
+    });
+
+    Route::middleware('role:kasir')->group(function () {
+        Route::view('/kasir/dashboard', 'admin.dashboard')->name('kasir.dashboard');
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('products', ProductController::class);
+        Route::view('/categories', 'modules.placeholder', ['module' => 'Kategori'])->name('categories.index');
+        Route::view('/users', 'modules.placeholder', ['module' => 'Pengguna'])->name('users.index');
+        Route::view('/reports', 'modules.placeholder', ['module' => 'Laporan'])->name('reports.index');
+    });
+
+    Route::middleware('role:admin,kasir')->group(function () {
+        Route::view('/transactions', 'modules.placeholder', ['module' => 'Transaksi'])
+            ->name('transactions.index');
+    });
+});
+
+require __DIR__.'/auth.php';

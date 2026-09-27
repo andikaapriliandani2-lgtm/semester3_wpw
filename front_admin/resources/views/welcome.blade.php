@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Arsha Bootstrap Template</title>
+  <title>Minimarket Workspace</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -27,6 +27,95 @@
   <!-- Main CSS File -->
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
 
+  <style>
+    :root {
+      --default-color: #33423d;
+      --heading-color: #173f35;
+      --accent-color: #f4b942;
+      --surface-color: #ffffff;
+      --background-color: #f4f7f2;
+      --contrast-color: #ffffff;
+    }
+
+    body {
+      background: #f4f7f2;
+    }
+
+    .header {
+      background: rgba(23, 63, 53, 0.96);
+    }
+
+    .header .logo h1,
+    .header .navmenu a {
+      color: #ffffff;
+    }
+
+    .header .navmenu a:hover,
+    .header .navmenu .active {
+      color: #f4b942;
+    }
+
+    .btn-getstarted,
+    .btn-get-started {
+      background: #f4b942;
+      border-color: #f4b942;
+      color: #173f35;
+      font-weight: 700;
+    }
+
+    .btn-getstarted:hover,
+    .btn-get-started:hover {
+      background: #ffd36a;
+      border-color: #ffd36a;
+      color: #173f35;
+    }
+
+    .hero {
+      background: #173f35 !important;
+    }
+
+    .hero h1,
+    .hero p {
+      color: #ffffff;
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .hero .btn-watch-video {
+      color: #ffffff;
+    }
+
+    .hero .btn-watch-video:hover {
+      color: #f4b942;
+    }
+
+    .section-title h2,
+    .about h3,
+    .services h3,
+    .why-us h3,
+    .skills h3 {
+      color: #173f35;
+    }
+
+    .section-title h2::after {
+      background: #f4b942;
+    }
+
+    .light-background {
+      background: #edf3ed;
+    }
+
+    a {
+      color: #28745f;
+    }
+
+    a:hover {
+      color: #173f35;
+    }
+  </style>
+
   <!-- =======================================================
   * Template Name: Arsha
   * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
@@ -44,12 +133,12 @@
       <a href="index.html" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="{{ asset('assets/img/logo.webp') }}" alt=""> -->
-        <h1 class="sitename">Arsha</h1>
+        <h1 class="sitename">Minimarket</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Home</a></li>
+          <li><a href="#hero" class="active">Dashboard</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#portfolio">Portfolio</a></li>
@@ -78,7 +167,7 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="{{ route('login') }}">login</a>
+      <a class="btn-getstarted" href="{{ route('login') }}">Masuk</a>
 
     </div>
   </header>
@@ -91,11 +180,11 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-            <h1>Better Solutions For Your Business</h1>
-            <p>We are team of talented designers making websites with Bootstrap</p>
+            <h1>Kelola minimarket dengan lebih tenang.</h1>
+            <p>Satu workspace untuk produk, transaksi, dan aktivitas toko Anda.</p>
             <div class="d-flex">
-              <a href="{{ route('login') }}" class="btn-get-started">login</a>
-              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+              <a href="{{ route('login') }}" class="btn-get-started">Masuk</a>
+              <a href="{{ route('register') }}" class="btn-watch-video d-flex align-items-center"><i class="bi bi-person-plus"></i><span>Daftar sekarang</span></a>
             </div>
           </div>
           <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="200">
@@ -1209,7 +1298,7 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Dashboard</a></li>
             <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
             <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
             <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>

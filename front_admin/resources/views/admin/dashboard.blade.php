@@ -1,3 +1,8 @@
+@php
+    $isAdmin = auth()->user()->role === 'admin';
+    $dashboardRoute = $isAdmin ? 'admin.dashboard' : 'kasir.dashboard';
+    $dashboardTitle = $isAdmin ? 'Dashboard Admin' : 'Dashboard Kasir';
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>{{ $dashboardTitle }} - Minimarket</title>
 
     <!-- Custom fonts for this template-->
       <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -17,9 +22,105 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+        <style>
+            :root {
+                --main-green: #173f35;
+                --main-green-light: #28745f;
+                --main-gold: #f4b942;
+                --main-background: #f4f7f2;
+            }
+
+            body {
+                background: var(--main-background);
+                font-family: 'Open Sans', sans-serif;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            .sidebar-brand-text,
+            .sidebar-heading,
+            .topbar,
+            .btn {
+                font-family: 'Poppins', sans-serif;
+            }
+
+            .bg-gradient-primary,
+            .sidebar {
+                background: var(--main-green) !important;
+                background-image: linear-gradient(180deg, var(--main-green) 10%, #0f2e27 100%) !important;
+            }
+
+            .sidebar .sidebar-brand,
+            .sidebar .nav-item .nav-link,
+            .sidebar .sidebar-heading {
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            .sidebar .nav-item.active .nav-link,
+            .sidebar .nav-item .nav-link:hover,
+            .sidebar .sidebar-brand:hover {
+                color: var(--main-gold);
+            }
+
+            .sidebar .sidebar-divider {
+                border-top-color: rgba(255, 255, 255, 0.14);
+            }
+
+            .sidebar .sidebar-card {
+                background: rgba(40, 116, 95, 0.55);
+            }
+
+            .topbar {
+                background: rgba(255, 255, 255, 0.96) !important;
+            }
+
+            .btn-primary,
+            .bg-primary {
+                background-color: var(--main-green-light) !important;
+                border-color: var(--main-green-light) !important;
+            }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: var(--main-green) !important;
+                border-color: var(--main-green) !important;
+            }
+
+            .text-primary {
+                color: var(--main-green-light) !important;
+            }
+
+            .border-left-primary {
+                border-left-color: var(--main-gold) !important;
+            }
+
+            .badge-warning,
+            .bg-warning {
+                background-color: var(--main-gold) !important;
+                color: var(--main-green) !important;
+            }
+
+            .card {
+                border-color: rgba(23, 63, 53, 0.08);
+                border-radius: 0.9rem;
+            }
+
+            .text-gray-800 {
+                color: var(--main-green) !important;
+            }
+
+            .progress-bar {
+                background-color: var(--main-green-light);
+            }
+        </style>
 
 </head>
 
@@ -32,11 +133,11 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route($dashboardRoute) }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Minimarket</div>
             </a>
 
             <!-- Divider -->
@@ -44,7 +145,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route($dashboardRoute) }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -52,87 +153,37 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+            @if ($isAdmin)
             <div class="sidebar-heading">
-                Interface
+                Data Master
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                <a class="nav-link" href="{{ route('products.index') }}">
+                    <i class="fas fa-fw fa-box"></i><span>Produk</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
             </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
+                <a class="nav-link" href="{{ route('categories.index') }}">
+                    <i class="fas fa-fw fa-tags"></i><span>Kategori</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
             </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                <a class="nav-link" href="{{ route('users.index') }}">
+                    <i class="fas fa-fw fa-users"></i><span>Pengguna</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
             </li>
-
-            <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                <a class="nav-link" href="{{ route('reports.index') }}">
+                    <i class="fas fa-fw fa-chart-area"></i><span>Laporan</span>
+                </a>
             </li>
+            @endif
 
-            <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="{{ route('transactions.index') }}">
+                    <i class="fas fa-fw fa-receipt"></i><span>Transaksi</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -331,7 +382,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->name }}</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -368,7 +419,10 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <div>
+                            <h1 class="h3 mb-1 text-gray-800">{{ $dashboardTitle }}</h1>
+                            <p class="mb-0 text-gray-600">Selamat datang, {{ auth()->user()->name }}</p>
+                        </div>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
@@ -732,7 +786,10 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="btn btn-primary" type="submit">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>
