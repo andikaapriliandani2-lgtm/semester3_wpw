@@ -19,6 +19,8 @@ class ProductFactory extends Factory
     {
         return [
             'name' => fake()->words(3, true),
+            'code' => fake()->unique()->bothify('SKU-#####'),
+            'barcode' => fake()->unique()->numerify('#############'),
             'category' => fake()->randomElement(['Sembako', 'Minuman', 'Makanan', 'Kebersihan']),
             'description' => fake()->optional()->sentence(),
             'price' => fake()->randomFloat(2, 1000, 500000),

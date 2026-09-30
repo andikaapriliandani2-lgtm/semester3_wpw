@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use App\Models\User;
+use Database\Seeders\ProductSeeder;
 
 test('admins can view the product index and product details', function () {
     $admin = User::factory()->create(['role' => 'admin']);
@@ -17,11 +18,28 @@ test('admins can view the product index and product details', function () {
         ->assertSeeText('Beras Premium');
 });
 
+test('admins see 200 seeded products in pages of 20', function () {
+    $this->seed(ProductSeeder::class);
+    $this->actingAs(User::factory()->create(['role' => 'admin']));
+
+    $firstPage = $this->get(route('products.index'))->assertOk();
+    $secondPage = $this->get(route('products.index', ['page' => 2]))->assertOk();
+    $firstProducts = $firstPage->viewData('products');
+    $secondProducts = $secondPage->viewData('products');
+
+    $this->assertDatabaseCount('products', 200);
+    expect($firstProducts->count())->toBe(20);
+    expect($secondProducts->count())->toBe(20);
+    expect($firstProducts->pluck('id')->intersect($secondProducts->pluck('id'))->isEmpty())->toBeTrue();
+});
+
 test('admins can create update and delete a product', function () {
     $this->actingAs(User::factory()->create(['role' => 'admin']));
 
     $createResponse = $this->post(route('products.store'), [
         'name' => 'Minyak Goreng',
+        'code' => 'SKU-MINYAK01',
+        'barcode' => '8991234567890',
         'category' => 'Sembako',
         'description' => 'Minyak goreng dua liter',
         'price' => 35000,
@@ -31,10 +49,17 @@ test('admins can create update and delete a product', function () {
 
     $createResponse->assertRedirect(route('products.index'));
     $product = Product::query()->where('name', 'Minyak Goreng')->firstOrFail();
-    $this->assertDatabaseHas('products', ['id' => $product->id, 'stock' => 12]);
+    $this->assertDatabaseHas('products', [
+        'id' => $product->id,
+        'stock' => 12,
+        'code' => 'SKU-MINYAK01',
+        'barcode' => '8991234567890',
+    ]);
 
     $updateResponse = $this->put(route('products.update', $product), [
         'name' => 'Minyak Goreng Premium',
+        'code' => 'SKU-MINYAK02',
+        'barcode' => '8991234567891',
         'category' => 'Sembako',
         'description' => 'Minyak goreng premium dua liter',
         'price' => 42000,
@@ -45,6 +70,8 @@ test('admins can create update and delete a product', function () {
     $this->assertDatabaseHas('products', [
         'id' => $product->id,
         'name' => 'Minyak Goreng Premium',
+        'code' => 'SKU-MINYAK02',
+        'barcode' => '8991234567891',
         'stock' => 8,
         'is_active' => false,
     ]);

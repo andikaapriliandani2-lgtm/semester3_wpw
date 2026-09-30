@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -15,7 +16,7 @@ class ProductController extends Controller
     public function index(): View
     {
         return view('products.index', [
-            'products' => Product::query()->latest()->paginate(10),
+            'products' => Product::query()->latest()->paginate(20),
         ]);
     }
 
@@ -86,6 +87,8 @@ class ProductController extends Controller
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'code' => ['nullable', 'string', 'max:255', Rule::unique('products', 'code')->ignore($request->route('product'))],
+            'barcode' => ['nullable', 'string', 'max:255', Rule::unique('products', 'barcode')->ignore($request->route('product'))],
             'category' => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],

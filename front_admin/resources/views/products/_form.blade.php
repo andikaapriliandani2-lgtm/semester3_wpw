@@ -6,6 +6,18 @@
     </div>
 
     <div class="col-md-6 form-group">
+        <label for="code">Kode produk / SKU</label>
+        <input id="code" name="code" type="text" class="form-control @error('code') is-invalid @enderror" value="{{ old('code', $product->code ?? '') }}">
+        <x-input-error :messages="$errors->get('code')" class="mt-2" />
+    </div>
+
+    <div class="col-md-6 form-group">
+        <label for="barcode">Barcode</label>
+        <input id="barcode" name="barcode" type="text" class="form-control @error('barcode') is-invalid @enderror" value="{{ old('barcode', $product->barcode ?? '') }}">
+        <x-input-error :messages="$errors->get('barcode')" class="mt-2" />
+    </div>
+
+    <div class="col-md-6 form-group">
         <label for="category">Kategori</label>
         <input id="category" name="category" type="text" class="form-control @error('category') is-invalid @enderror" value="{{ old('category', $product->category ?? '') }}">
         <x-input-error :messages="$errors->get('category')" class="mt-2" />

@@ -62,7 +62,7 @@
                     </table>
                 </div>
 
-                <div class="mt-3">{{ $products->links() }}</div>
+                <div class="mt-3">{{ $products->links('pagination::bootstrap-4') }}</div>
             </div>
         </div>
     </div>
