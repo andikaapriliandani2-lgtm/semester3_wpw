@@ -27,27 +27,77 @@
                     <table class="table table-bordered table-hover align-middle">
                         <thead class="thead-light">
                             <tr>
-                                <th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Status</th><th>Aksi</th>
+                                <th>Produk</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($products as $product)
                                 <tr>
+
                                     <td>
-                                        <a href="{{ route('products.show', $product) }}" class="font-weight-bold text-primary">{{ $product->name }}</a>
-                                        @if ($product->description)
-                                            <small class="d-block text-muted">{{ Str::limit($product->description, 50) }}</small>
-                                        @endif
+                                        <div class="d-flex align-items-center" style="gap: 12px;">
+
+                                            {{-- Gambar Produk --}}
+                                            @if ($product->image)
+                                                <img src="{{ asset('storage/' . $product->image) }}"
+                                                    alt="{{ $product->name }}"
+                                                    style="
+                                                        width: 55px;
+                                                        height: 55px;
+                                                        object-fit: cover;
+                                                        border-radius: 8px;
+                                                        border: 1px solid #e5e7eb;
+                                                    ">
+                                            @else
+                                                <div
+                                                    style="
+                                                    width: 55px;
+                                                    height: 55px;
+                                                    background: #f1f5f9;
+                                                    border-radius: 8px;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    color: #94a3b8;
+                                                    font-size: 11px;
+                                                ">
+                                                    No Image
+                                                </div>
+                                            @endif
+
+                                            {{-- Informasi Produk --}}
+                                            <div>
+                                                <strong>{{ $product->name }}</strong>
+
+                                                <br>
+
+                                                <small class="text-muted">
+                                                    {{ $product->code }}
+                                                </small>
+                                            </div>
+
+                                        </div>
                                     </td>
+
                                     <td>{{ $product->category ?: '-' }}</td>
                                     <td>Rp {{ number_format((float) $product->price, 0, ',', '.') }}</td>
                                     <td>{{ $product->stock }}</td>
-                                    <td><span class="badge {{ $product->is_active ? 'badge-success' : 'badge-secondary' }}">{{ $product->is_active ? 'Aktif' : 'Tidak aktif' }}</span></td>
+                                    <td><span
+                                            class="badge {{ $product->is_active ? 'badge-success' : 'badge-secondary' }}">{{ $product->is_active ? 'Aktif' : 'Tidak aktif' }}</span>
+                                    </td>
                                     <td>
                                         <div class="d-flex" style="gap: 0.35rem">
-                                            <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-info text-white">Detail</a>
-                                            <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-warning">Edit</a>
-                                            <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Hapus produk ini?')">
+                                            <a href="{{ route('products.show', $product) }}"
+                                                class="btn btn-sm btn-info text-white">Detail</a>
+                                            <a href="{{ route('products.edit', $product) }}"
+                                                class="btn btn-sm btn-warning">Edit</a>
+                                            <form method="POST" action="{{ route('products.destroy', $product) }}"
+                                                onsubmit="return confirm('Hapus produk ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
@@ -56,7 +106,9 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center py-4">Belum ada data produk.</td></tr>
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">Belum ada data produk.</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>

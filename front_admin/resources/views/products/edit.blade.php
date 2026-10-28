@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="card shadow-sm">
             <div class="card-body">
-                <form method="POST" action="{{ route('products.update', $product) }}">
+                <form method="POST" action="{{ route('products.update', $product) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     @include('products._form')

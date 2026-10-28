@@ -11,6 +11,7 @@ class TransactionDetail extends Model
         'product_id',
         'product_code',
         'product_name',
+        'product_image',
         'price',
         'quantity',
         'subtotal',

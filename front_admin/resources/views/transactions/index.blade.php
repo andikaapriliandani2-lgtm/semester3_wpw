@@ -14,9 +14,13 @@
         .pos-search-row .form-control { min-width: 0; height: 44px; }
         .pos-search-row .btn { min-width: 48px; }
         .pos-results { position: absolute; z-index: 5; top: calc(100% + 4px); right: 0; left: 0; display: none; max-height: 280px; overflow-y: auto; border: 1px solid #dbe2df; border-radius: 6px; background: #fff; box-shadow: 0 8px 20px rgba(25, 47, 40, .12); }
-        .pos-result { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem .85rem; cursor: pointer; border-bottom: 1px solid #eef1ef; }
+        .pos-result { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem .85rem; cursor: pointer; border-bottom: 1px solid #eef1ef; }
         .pos-result:last-child { border-bottom: 0; }
         .pos-result:hover, .pos-result:focus { background: #f0f6f2; outline: 0; }
+        .pos-result-details, .pos-cart-product { display: flex; min-width: 0; align-items: center; gap: .65rem; }
+        .pos-thumbnail { display: block; width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid #e1e7e3; border-radius: 6px; background: #f1f5f2; object-fit: cover; }
+        .pos-thumbnail-empty { display: flex; align-items: center; justify-content: center; color: #94a39b; }
+        .pos-cart-product .pos-thumbnail { width: 38px; height: 38px; flex-basis: 38px; }
         .pos-result-name { color: #193c32; font-size: .84rem; font-weight: 700; }
         .pos-result-code, .pos-result-stock { color: #708079; font-size: .72rem; }
         .pos-result-price { color: #28745f; font-size: .8rem; font-weight: 700; white-space: nowrap; }

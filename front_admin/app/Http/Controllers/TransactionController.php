@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransactionController extends Controller
 {
@@ -39,7 +43,20 @@ class TransactionController extends Controller
             })
             ->orderBy('name')
             ->limit(20)
-            ->get(['id', 'name', 'code', 'barcode', 'price', 'stock']);
+            ->get(['id', 'name', 'code', 'barcode', 'price', 'stock', 'image'])
+            ->map(function (Product $product): array {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'code' => $product->code,
+                    'barcode' => $product->barcode,
+                    'price' => $product->price,
+                    'stock' => $product->stock,
+                    'image_url' => $product->image
+                        ? Storage::disk('public')->url($product->image)
+                        : null,
+                ];
+            });
 
         return response()->json(['products' => $products]);
     }
@@ -125,6 +142,7 @@ class TransactionController extends Controller
                     'product_id' => $product->id,
                     'product_code' => $product->code,
                     'product_name' => $product->name,
+                    'product_image' => $product->image,
                     'price' => $product->price,
                     'quantity' => $quantity,
                     'subtotal' => round((float) $product->price * $quantity, 2),
@@ -141,7 +159,34 @@ class TransactionController extends Controller
     public function receipt(Transaction $transaction): View
     {
         return view('transactions.receipt', [
-            'transaction' => $transaction->load(['details', 'user']),
+            'transaction' => $transaction->load(['details.product', 'user']),
         ]);
+    }
+
+    public function invoice(Transaction $transaction): Response
+    {
+        $transaction->load(['details.product', 'user']);
+        $invoiceImages = $transaction->details->mapWithKeys(function (TransactionDetail $detail): array {
+            $imagePath = $detail->product_image ?: $detail->product?->image;
+            if (! $imagePath || ! Storage::disk('public')->exists($imagePath)) {
+                return [$detail->id => null];
+            }
+
+            $mimeType = Storage::disk('public')->mimeType($imagePath);
+            if (! $mimeType || ! str_starts_with($mimeType, 'image/')) {
+                return [$detail->id => null];
+            }
+
+            $image = Storage::disk('public')->get($imagePath);
+
+            return [$detail->id => 'data:'.$mimeType.';base64,'.base64_encode($image)];
+        });
+
+        return Pdf::loadView('invoices.invoice', [
+            'transaction' => $transaction,
+            'invoiceImages' => $invoiceImages,
+        ])
+            ->setPaper('a4')
+            ->download('invoice-'.$transaction->id.'.pdf');
     }
 }

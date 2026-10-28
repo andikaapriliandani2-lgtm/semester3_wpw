@@ -24,10 +24,39 @@
     </div>
 
     <div class="col-md-6 form-group">
-        <label for="image">Nama file gambar</label>
-        <input id="image" name="image" type="text" class="form-control @error('image') is-invalid @enderror" value="{{ old('image', $product->image ?? '') }}" placeholder="contoh: beras-5kg.jpg">
-        <x-input-error :messages="$errors->get('image')" class="mt-2" />
+        <label for="image">Gambar Produk</label>
+
+        <input
+            id="image"
+            name="image"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            class="form-control @error('image') is-invalid @enderror"
+        >
+
+        <small class="form-text text-muted">
+            Format JPG, PNG, atau WebP. Maksimal 2 MB.
+        </small>
+
+        @error('image')
+            <div class="invalid-feedback d-block">
+                {{ $message }}
+            </div>
+        @enderror
+
+        @if(isset($product) && $product->image)
+            <div class="mt-3">
+                <p class="mb-2">Gambar saat ini:</p>
+
+                <img
+                    src="{{ asset('storage/' . $product->image) }}"
+                    alt="{{ $product->name }}"
+                    style="max-width: 180px; height: auto; border-radius: 8px;"
+                >
+            </div>
+        @endif
     </div>
+
 
     <div class="col-md-6 form-group">
         <label for="price">Harga</label>

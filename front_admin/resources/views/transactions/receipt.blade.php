@@ -6,7 +6,8 @@
         .receipt-paper { padding: 1.5rem; border: 1px solid #dfe5e1; border-radius: 8px; background: #fff; }
         .receipt-title { color: #173f35; font-size: 1.1rem; font-weight: 700; }
         .receipt-meta { color: #697871; font-size: .78rem; }
-        .receipt-table th, .receipt-table td { padding: .5rem .35rem; font-size: .8rem; }
+        .receipt-table th, .receipt-table td { padding: .5rem .35rem; font-size: .8rem; vertical-align: middle; }
+        .receipt-product-image { width: 44px; height: 44px; border: 1px solid #dfe5e1; border-radius: 5px; object-fit: cover; }
         .receipt-total { color: #173f35; font-size: 1.15rem; font-weight: 700; }
         @media print {
             #accordionSidebar, .topbar, .receipt-actions { display: none !important; }
@@ -21,7 +22,10 @@
     <main class="receipt-wrap">
         <div class="receipt-actions d-flex justify-content-between align-items-center mb-3">
             <a class="btn btn-outline-secondary btn-sm" href="{{ route('transactions.index') }}"><i class="fas fa-arrow-left mr-1" aria-hidden="true"></i>Transaksi Baru</a>
-            <button class="btn btn-primary btn-sm" type="button" onclick="window.print()"><i class="fas fa-print mr-1" aria-hidden="true"></i>Cetak Struk</button>
+            <div class="d-flex align-items-center">
+                <a class="btn btn-outline-primary btn-sm mr-2" href="{{ route('transactions.invoice', $transaction) }}"><i class="fas fa-file-pdf mr-1" aria-hidden="true"></i>Unduh Invoice PDF</a>
+                <button class="btn btn-primary btn-sm" type="button" onclick="window.print()"><i class="fas fa-print mr-1" aria-hidden="true"></i>Cetak Struk</button>
+            </div>
         </div>
         <section class="receipt-paper">
             <header class="text-center mb-3">
@@ -34,10 +38,18 @@
 
             <div class="table-responsive">
                 <table class="table receipt-table mb-2">
-                    <thead><tr><th>Barang</th><th class="text-center">Qty</th><th class="text-right">Subtotal</th></tr></thead>
+                    <thead><tr><th>Gambar</th><th>Barang</th><th class="text-center">Qty</th><th class="text-right">Subtotal</th></tr></thead>
                     <tbody>
                         @foreach ($transaction->details as $detail)
+                            @php($productImage = $detail->product_image ?: $detail->product?->image)
                             <tr>
+                                <td>
+                                    @if ($productImage)
+                                        <img class="receipt-product-image" src="{{ asset('storage/' . $productImage) }}" alt="Gambar {{ $detail->product_name }}">
+                                    @else
+                                        <span class="receipt-meta">-</span>
+                                    @endif
+                                </td>
                                 <td>{{ $detail->product_name }}<div class="receipt-meta">{{ $detail->product_code }} · {{ \Illuminate\Support\Number::currency((float) $detail->price, 'IDR', locale: 'id') }}</div></td>
                                 <td class="text-center">{{ $detail->quantity }}</td>
                                 <td class="text-right">{{ \Illuminate\Support\Number::currency((float) $detail->subtotal, 'IDR', locale: 'id') }}</td>

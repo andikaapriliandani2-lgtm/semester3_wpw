@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="card shadow-sm">
             <div class="card-body">
-                <form method="POST" action="{{ route('products.store') }}">
+                <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                     @csrf
                     @include('products._form')
                     <div class="border-top pt-4 mt-4 text-right">

@@ -32,6 +32,11 @@ if (app) {
                 })[character],
         );
 
+    const productImage = (imageUrl, className = "") =>
+        imageUrl
+            ? `<img class="pos-thumbnail ${className}" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">`
+            : '<span class="pos-thumbnail pos-thumbnail-empty" aria-hidden="true"><i class="fas fa-image"></i></span>';
+
     const totals = () => {
         const subtotal = cart.reduce(
             (sum, item) => sum + item.price * item.quantity,
@@ -111,7 +116,7 @@ if (app) {
                     (item, index) => `
                 <tr>
                     <td>${index + 1}</td>
-                    <td><div class="pos-product-name">${escapeHtml(item.name)}</div><div class="pos-product-code">${escapeHtml(item.code || item.barcode || "Tanpa kode")}</div></td>
+                    <td><div class="pos-cart-product">${productImage(item.image_url)}<div><div class="pos-product-name">${escapeHtml(item.name)}</div><div class="pos-product-code">${escapeHtml(item.code || item.barcode || "Tanpa kode")}</div></div></div></td>
                     <td class="text-right">${rupiah(item.price)}</td>
                     <td><div class="pos-qty"><button type="button" data-action="decrease" data-id="${item.id}" aria-label="Kurangi ${escapeHtml(item.name)}">−</button><input type="number" min="1" max="${item.stock}" value="${item.quantity}" data-action="quantity" data-id="${item.id}" aria-label="Jumlah ${escapeHtml(item.name)}"><button type="button" data-action="increase" data-id="${item.id}" aria-label="Tambah ${escapeHtml(item.name)}">+</button></div></td>
                     <td class="text-right font-weight-bold">${rupiah(item.price * item.quantity)}</td>
@@ -141,6 +146,7 @@ if (app) {
                 name: product.name,
                 code: product.code,
                 barcode: product.barcode,
+                image_url: product.image_url,
                 price: Number(product.price),
                 stock: Number(product.stock),
                 quantity: 1,
@@ -175,7 +181,7 @@ if (app) {
                 ? products
                       .map(
                           (product) =>
-                              `<div class="pos-result" role="option" tabindex="0" data-product-id="${product.id}"><div><div class="pos-result-name">${escapeHtml(product.name)}</div><div class="pos-result-code">${escapeHtml(product.code || "Tanpa SKU")} · ${escapeHtml(product.barcode || "Tanpa barcode")} · Stok ${product.stock}</div></div><div class="pos-result-price">${rupiah(product.price)}</div></div>`,
+                              `<div class="pos-result" role="option" tabindex="0" data-product-id="${product.id}"><div class="pos-result-details">${productImage(product.image_url)}<div><div class="pos-result-name">${escapeHtml(product.name)}</div><div class="pos-result-code">${escapeHtml(product.code || "Tanpa SKU")} · ${escapeHtml(product.barcode || "Tanpa barcode")} · Stok ${product.stock}</div></div></div><div class="pos-result-price">${rupiah(product.price)}</div></div>`,
                       )
                       .join("")
                 : '<div class="pos-result text-muted">Barang tidak ditemukan</div>';

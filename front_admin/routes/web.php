@@ -45,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
         Route::get('/transactions/{transaction}/receipt', [TransactionController::class, 'receipt'])
             ->name('transactions.receipt');
+        Route::get('/transactions/{transaction}/invoice', [TransactionController::class, 'invoice'])
+            ->name('transactions.invoice');
     });
 });
 
